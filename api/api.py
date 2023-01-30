@@ -1,19 +1,22 @@
-from flask import make_response, jsonify, request, Blueprint
-from os import environ
+from flask import make_response, jsonify, request, Blueprint, current_app
 import housecanary
 import json
 
 bp = Blueprint('api', __name__)
+house_canary_client = None
 
-# TODO replace with this + ENV variables client = housecanary.ApiClient()
-house_canary_key = environ.get('HOUSE_CANARY_API_KEY')
-house_canary_secret = environ.get('HOUSE_CANARY_SECRET_KEY')
-print('key: ' + str(house_canary_key))
-print('secret: ' + str(house_canary_secret))
-client = housecanary.ApiClient(house_canary_key, house_canary_secret)
+def getHouseCanaryClient():
+    global house_canary_client
+    if house_canary_client is None:
+        api_key = current_app.config.get('HOUSE_CANARY_API_KEY')
+        secret_key = current_app.config.get('HOUSE_CANARY_SECRET_KEY')
+        house_canary_client = housecanary.ApiClient(api_key, secret_key)
+    return house_canary_client
+
+
 
 def call_house_canary(street_address, zipcode):
-    api_response = client.property.details((street_address, zipcode))
+    api_response = getHouseCanaryClient().property.details((street_address, zipcode))
     return api_response.json()
 
 def process_results(api_response):

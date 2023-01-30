@@ -1,0 +1,3 @@
+from os import environ
+HOUSE_CANARY_SECRET_KEY = environ.get('HOUSE_CANARY_SECRET_KEY')
+HOUSE_CANARY_API_KEY = environ.get('HOUSE_CANARY_API_KEY')

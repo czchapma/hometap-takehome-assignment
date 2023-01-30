@@ -1,9 +1,9 @@
 from flask import Flask
+from os import environ
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    # TODO: move this to env varaible for production
-    app.secret_key = 'h432hi5ohi3h5i5hi3o2hi'
+    app.config.from_pyfile('settings.py')
     from . import api
     app.register_blueprint(api.bp)
     return app

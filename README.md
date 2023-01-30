@@ -1,4 +1,4 @@
-# Implementation Notes:
+# Implementation Notes
 The core assignment was to design and implement a new API to connect with the 3P House Canary API to return information on whether a given address has a septic system.
 
 The frontend will then use this information to determine whether to prompt for additional questions. It is possible to abstract this API to focus on whether the frontend should prompt for an additional question instead of whether the house has a septic system. But ultimately determining business logic like this is probably best left for the frontend as there could be scenarios in the future that need access to whether they have a septic system and there could be different flows using this API that need different logic (ex: condo vs. single family home). In a workplace setting, this would be an important conversation to have with the product manager and the frontend engineers to validate that this assumption is correct.
@@ -10,6 +10,7 @@ cd [cloned directory]
 pipenv install flask
 pip install housecanary
 pipenv install pytest
+pipenv install python-dotenv
 pipenv shell
 export FLASK_APP=api
 export FLASK_ENV=development # Optional
@@ -58,11 +59,10 @@ in the initial design meeting and determine as a team the priority/timeline for 
 
 # TODOs
 * Fix unit tests (204)
+* Verify original case returns 401 error (Invalid Credentials != Missing Authentication)
 * Clean up code, add comments
 * Clean up README
 * Test installation steps
-* Move API key to env variable https://prettyprinted.com/tutorials/automatically_load_environment_variables_in_flask
-* Verify original case returns 401 error (Invalid Credentials != Missing Authentication)
 * Verify error responses from Home Canary are correct
 
 # Topics to discuss with the team
