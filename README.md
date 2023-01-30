@@ -7,16 +7,16 @@ The frontend will then use this information to determine whether to prompt for a
 ```bash
 [git clone this repo]
 cd [cloned directory]
-pipenv install flask
-pip install housecanary
-pipenv install pytest
-pipenv install python-dotenv
 pipenv shell
-export FLASK_APP=api
-export FLASK_ENV=development # Optional
+pipenv install flask
 
-[Add in valid environment variables]
+[Update environment variables in .env]
 flask run
+```
+
+To run the tests, within the pipenv shell run
+```bash
+pytest
 ```
 
 ## API Design
