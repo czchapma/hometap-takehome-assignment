@@ -22,7 +22,7 @@ flask run
 ## API Design
 2XX
 * 200 - isSeptic yes/no
-* 204 - Address / Sewer information could not be found in the DB
+* 204 - No content. Address / Sewer information could not be found in the DB
 4XX - Unable to return results
 * 400 Missing required param
 * 401 Auth failed
@@ -56,14 +56,6 @@ in the initial design meeting and determine as a team the priority/timeline for 
 # Next steps
 * The documentation indicates that the 3P api can accept **address** (where the apartment unit is included in **address**) or can accept **address** and **unit**. Although beyond the scope of this assignment, to make this API more robust in the future it would probably be best to collect address and unit separately from the frontend, assuming the frontend already has access to this information. If we integrate with additional APIs in the future or if House Canary starts requiring unit separately, this will ensure we have the right information.
 * For now the API we created requires that the address is formatted correctly/is a valid address. There is not additional validation done. Since HouseCanary does not charge for API calls when the address is not valid, there isn't a cost associated with this, but it will result in a delay on the client for an issue that is larger than whether they have a septic tank.
-
-# TODOs
-* Fix unit tests (204)
-* Verify original case returns 401 error (Invalid Credentials != Missing Authentication)
-* Clean up code, add comments
-* Clean up README
-* Test installation steps
-* Verify error responses from Home Canary are correct
 
 # Topics to discuss with the team
 

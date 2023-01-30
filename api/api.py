@@ -5,7 +5,10 @@ import json
 bp = Blueprint('api', __name__)
 house_canary_client = None
 
-def getHouseCanaryClient():
+def get_house_canary_client():
+    '''
+    Creates or retrieves the client for calling the House Canary API
+    '''
     global house_canary_client
     if house_canary_client is None:
         api_key = current_app.config.get('HOUSE_CANARY_API_KEY')
@@ -13,13 +16,18 @@ def getHouseCanaryClient():
         house_canary_client = housecanary.ApiClient(api_key, secret_key)
     return house_canary_client
 
-
-
 def call_house_canary(street_address, zipcode):
-    api_response = getHouseCanaryClient().property.details((street_address, zipcode))
+    '''
+    Calls the House Canary API passing in street_address and zipcode
+    '''
+    api_response = get_house_canary_client().property.details((street_address, zipcode))
     return api_response.json()
 
 def process_results(api_response):
+    '''
+    Helper function for processing the API response from the house canary API
+    or in the case of testing the json response from mockdata
+    '''
     # Success Case
     if 'result' in api_response.keys():
         results = api_response['result']
@@ -34,10 +42,9 @@ def process_results(api_response):
                 #return successful
                 return make_response(jsonify({'has_septic' : has_septic}), 200)
 
-        # if results were returned, without sewer information, 204 error
+        # if results were returned, without sewer information, return 204
         error_code = 204
-        error_message = 'Septic status unknown for this address'
-        return make_response(jsonify({'message': error_message}), error_code)
+        return make_response('', error_code)
     elif 'message' in api_response.keys():
         if api_response['message'] == "Authentication Failed" and api_response['code'] == 401:
             error_code = 401
@@ -51,14 +58,22 @@ def process_results(api_response):
 
     return make_response(jsonify({'message': error_message}), error_code)
 
-
-def get_json(filename):
-    with open (filename) as data:
+# helper
+def get_json_from_file(filepath):
+    '''
+    Helper function for testing that will open the file at filepath
+    and return the json output of the file
+    '''
+    with open (filepath) as data:
         return json.load(data)
     return json.dumps({})
 
 @bp.route('/has-septic-system')
 def has_septic_system():
+    '''
+    GET API route for determining whether a given address and zipcode
+    has a septic system
+    '''
     # TODO: Add authentication check in the future
     street_address = request.args['address']
     zipcode = request.args['zipcode']
@@ -74,7 +89,7 @@ def has_septic_system():
         response =  process_results(call_house_canary(street_address, zipcode))
     else:
         # grab test data
-        response = process_results(get_json('api/mockdata/' + optional_test_data + '.json'))
+        response = process_results(get_json_from_file('api/mockdata/' + optional_test_data + '.json'))
 
     response.headers["Content-Type"] = "application/json"
     return response

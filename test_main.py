@@ -31,7 +31,6 @@ def test_has_sewer_none(client):
 def test_204_error(client):
     response = client.get('/has-septic-system?address=101 Main St&zipcode=02142&testData=failure-204')
     assert 204 == response.status_code
-    assert b'Septic status unknown for this address' in response.data
 
 def test_400_error(client):
     response = client.get('/has-septic-system?address=101 Main St&zipcode=02142&testData=failure-400')
